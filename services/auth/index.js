@@ -1,6 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
 const { user } = new PrismaClient();
-const bcrypt = require("bcrypt");
 const ApiError = require("../../helpers/errorHandler");
 const { getHash, checkHash } = require("../../helpers/passwordHash");
 const Validator = require("fastest-validator");
