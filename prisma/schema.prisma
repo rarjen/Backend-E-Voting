@@ -52,6 +52,8 @@ model Vice_presidental_candidate {
 model Political_party {
   id                          String                       @id @default(uuid())
   name                        String
+  abbreviation                String
+  description                 String?
   createdAt                   DateTime                     @default(now())
   updatedAt                   DateTime                     @updatedAt
   Presidental_candidate       Presidental_candidate[]
