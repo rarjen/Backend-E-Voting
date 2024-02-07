@@ -79,65 +79,71 @@ const register = async (req) => {
 const login = async (req) => {
   const { nik, email, password } = req.body;
 
-  const schemaNik = {
-    nik: { type: "string", min: 16 },
-  };
+  if (req.body.email) {
+    const schemaEmail = {
+      email: { type: "email", label: "Email Address" },
+    };
 
-  const schemaEmail = {
-    email: { type: "email", label: "Email Address" },
-  };
+    const checkEmail = await v.compile(schemaEmail);
+
+    const validateEmail = checkEmail({
+      email: `${email}`,
+    });
+
+    // Email Validation
+    if (validateEmail.length > 0) {
+      throw ApiError.badRequest("Email tidak valid");
+    }
+  }
+
+  if (req.body.nik) {
+    const schemaNik = {
+      nik: { type: "string", min: 16 },
+    };
+
+    const checkNik = await v.compile(schemaNik);
+
+    const validateNik = checkNik({
+      nik: `${nik}`,
+    });
+
+    // Nik Validation
+    if (validateNik.length > 0) {
+      throw ApiError.badRequest("Nik minimal 16 karakter");
+    }
+  }
 
   const schemaPassword = {
     password: { type: "string", min: 6 },
   };
 
-  const checkEmail = await v.compile(schemaEmail);
   const checkPassword = await v.compile(schemaPassword);
-  const checkNik = await v.compile(schemaNik);
-
-  const validateEmail = checkEmail({
-    email: `${email}`,
-  });
 
   const validatePassword = checkPassword({
     password: `${password}`,
   });
-
-  const validateNik = checkNik({
-    nik: `${nik}`,
-  });
-
-  // Email Validation
-  if (validateEmail.length > 0) {
-    throw ApiError.badRequest("Email tidak valid");
-  }
 
   // Password Validation
   if (validatePassword.length > 0) {
     throw ApiError.badRequest("Password minimal 6 karakter");
   }
 
-  // Nik Validation
-  if (validateNik.length > 0) {
-    throw ApiError.badRequest("Nik minimal 16 karakter");
-  }
-
-  const user = await user.findFirst({
+  const userExist = await user.findFirst({
     where: {
       OR: [{ email: email }, { nik: nik }],
     },
   });
 
-  const match = checkHash(password, user.password);
+  const match = checkHash(password, userExist.password);
   if (!match) {
     throw ApiError.badRequest("Email/NIK/password salah");
   }
 
   let payload = {
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    nik: user.nik,
+    id: userExist.id,
+    name: userExist.name,
+    email: userExist.email,
+    nik: userExist.nik,
   };
 
   const token = jwt.sign(payload, JWT_SECRET_KEY);
@@ -145,11 +151,9 @@ const login = async (req) => {
   return { token };
 };
 
-const whoami = async (req) => {
-  const user = req.user;
-
+const whoami = async (user_id) => {
   const result = await user.findFirst({
-    where: { nik: user.nik },
+    where: { id: user_id },
   });
 
   const resultWithoutPassword = { ...result, password: undefined };
