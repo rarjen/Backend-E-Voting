@@ -23,30 +23,32 @@ model User {
 }
 
 model Presidental_candidate {
-  id                           String                     @id @default(uuid())
-  political_party              Political_party            @relation(fields: [political_party_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  political_party_id           String
-  vice_presidential_partner    Vice_presidental_candidate @relation(fields: [vice_presidential_partner_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  vice_presidential_partner_id String
-  name                         String
-  age                          Int
-  description                  String
-  createdAt                    DateTime                   @default(now())
-  updatedAt                    DateTime                   @updatedAt
-  Candidate_pair_number        Candidate_pair_number[]
+  id                         String                       @id @default(uuid())
+  political_party            Political_party              @relation(fields: [political_party_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  political_party_id         String
+  name                       String
+  age                        Int
+  description                String
+  img_url                    String?
+  createdAt                  DateTime                     @default(now())
+  updatedAt                  DateTime                     @updatedAt
+  Candidate_pair_number      Candidate_pair_number[]
+  Vice_presidental_candidate Vice_presidental_candidate[]
 }
 
 model Vice_presidental_candidate {
-  id                    String                  @id @default(uuid())
-  political_party       Political_party         @relation(fields: [political_party_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  political_party_id    String
-  name                  String
-  age                   Int
-  description           String
-  createdAt             DateTime                @default(now())
-  updatedAt             DateTime                @updatedAt
-  Presidental_candidate Presidental_candidate[]
-  Candidate_pair_number Candidate_pair_number[]
+  id                     String                  @id @default(uuid())
+  political_party        Political_party         @relation(fields: [political_party_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  political_party_id     String
+  presidental_partner    Presidental_candidate   @relation(fields: [presidental_partner_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  presidental_partner_id String
+  name                   String
+  age                    Int
+  description            String
+  img_url                String?
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  Candidate_pair_number  Candidate_pair_number[]
 }
 
 model Political_party {
@@ -54,6 +56,7 @@ model Political_party {
   name                        String
   abbreviation                String
   description                 String?
+  img_url                     String?
   createdAt                   DateTime                     @default(now())
   updatedAt                   DateTime                     @updatedAt
   Presidental_candidate       Presidental_candidate[]
