@@ -9,3 +9,88 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        String   @id @default(uuid())
+  nik       String
+  email     String
+  name      String
+  address   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Presidental_candidate {
+  id                           String                     @id @default(uuid())
+  political_party              Political_party            @relation(fields: [political_party_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  political_party_id           String
+  vice_presidential_partner    Vice_presidental_candidate @relation(fields: [vice_presidential_partner_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  vice_presidential_partner_id String
+  name                         String
+  age                          Int
+  description                  String
+  createdAt                    DateTime                   @default(now())
+  updatedAt                    DateTime                   @updatedAt
+  Candidate_pair_number        Candidate_pair_number[]
+}
+
+model Vice_presidental_candidate {
+  id                    String                  @id @default(uuid())
+  political_party       Political_party         @relation(fields: [political_party_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  political_party_id    String
+  name                  String
+  age                   Int
+  description           String
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  Presidental_candidate Presidental_candidate[]
+  Candidate_pair_number Candidate_pair_number[]
+}
+
+model Political_party {
+  id                          String                       @id @default(uuid())
+  name                        String
+  createdAt                   DateTime                     @default(now())
+  updatedAt                   DateTime                     @updatedAt
+  Presidental_candidate       Presidental_candidate[]
+  Vice_presidental_candidates Vice_presidental_candidate[]
+  Supporting_party            Supporting_party[]
+}
+
+model Candidate_pair_number {
+  id                            String                     @id @default(uuid())
+  presidental_candidate         Presidental_candidate      @relation(fields: [presidental_candidate_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  presidental_candidate_id      String
+  vice_presidental_candidate    Vice_presidental_candidate @relation(fields: [vice_presidental_candidate_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  vice_presidental_candidate_id String
+  createdAt                     DateTime                   @default(now())
+  updatedAt                     DateTime                   @updatedAt
+  Supporting_party              Supporting_party[]
+  Voting_result                 Voting_result[]
+}
+
+model Supporting_party {
+  id                       String                @id @default(uuid())
+  candidate_pair_number    Candidate_pair_number @relation(fields: [candidate_pair_number_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  candidate_pair_number_id String
+  political_party          Political_party       @relation(fields: [political_party_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  political_party_id       String
+  createdAt                DateTime              @default(now())
+  updatedAt                DateTime              @updatedAt
+}
+
+model Voting_log {
+  id                         String   @id @default(uuid())
+  encrypted_user_id          String
+  encrypted_candidate_number String
+  createdAt                  DateTime @default(now())
+  updatedAt                  DateTime @updatedAt
+}
+
+model Voting_result {
+  id                       String                @id @default(uuid())
+  candidate_pair_number    Candidate_pair_number @relation(fields: [candidate_pair_number_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  candidate_pair_number_id String
+  createdAt                DateTime              @default(now())
+  updatedAt                DateTime              @updatedAt
+}
