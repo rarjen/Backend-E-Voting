@@ -1,4 +1,4 @@
-const { StatusCodes } = require("http-status-codes");
+const { STATUS_CODES } = require("http");
 const { constants } = require("http2");
 
 class ApiError {
@@ -15,21 +15,21 @@ class ApiError {
   }
 
   static unauthorized(
-    message = StatusCodes[constants.HTTP_STATUS_UNAUTHORIZED]
+    message = STATUS_CODES[constants.HTTP_STATUS_UNAUTHORIZED]
   ) {
     return new ApiError(constants.HTTP_STATUS_UNAUTHORIZED, message);
   }
 
-  static forbidden(message = StatusCodes[constants.HTTP_STATUS_FORBIDDEN]) {
+  static forbidden(message = STATUS_CODES[constants.HTTP_STATUS_FORBIDDEN]) {
     return new ApiError(constants.HTTP_STATUS_FORBIDDEN, message);
   }
 
-  static notFound(message = StatusCodes[constants.HTTP_STATUS_NOT_FOUND]) {
+  static notFound(message = STATUS_CODES[constants.HTTP_STATUS_NOT_FOUND]) {
     return new ApiError(constants.HTTP_STATUS_NOT_FOUND, message);
   }
 
   static unprocessableEntity(
-    message = StatusCodes[constants.HTTP_STATUS_UNPROCESSABLE_ENTITY],
+    message = STATUS_CODES[constants.HTTP_STATUS_UNPROCESSABLE_ENTITY],
     errors = {}
   ) {
     return new ApiError(
