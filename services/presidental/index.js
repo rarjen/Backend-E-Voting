@@ -38,7 +38,7 @@ const getAll = async (req) => {
 };
 
 const update = async (req) => {
-  getOne(req);
+  await getOne(req);
 
   const result = await presidental_candidate.update({
     where: {
@@ -51,7 +51,7 @@ const update = async (req) => {
 };
 
 const destroy = async (req) => {
-  getOne(req);
+  await getOne(req);
 
   const result = await presidental_candidate.delete({
     where: { id: req.params.id },
