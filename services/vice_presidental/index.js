@@ -28,7 +28,7 @@ const create = async (req) => {
 const getOne = async (req) => {
   const result = await vice_presidental_candidate.findFirst({
     where: { id: req.params.id },
-    include: { political_party: true, presidental_candidate: true },
+    include: { political_party: true, presidental_partner: true },
   });
 
   if (!result) {
@@ -40,14 +40,14 @@ const getOne = async (req) => {
 
 const getAll = async (req) => {
   const result = await vice_presidental_candidate.findMany({
-    include: { political_party: true, presidental_candidate: true },
+    include: { political_party: true, presidental_partner: true },
   });
 
   return result;
 };
 
 const update = async (req) => {
-  getOne(req);
+  await getOne(req);
 
   const result = await vice_presidental_candidate.update({
     where: {
@@ -60,7 +60,7 @@ const update = async (req) => {
 };
 
 const destroy = async (req) => {
-  getOne(req);
+  await getOne(req);
 
   const result = await vice_presidental_candidate.delete({
     where: { id: req.params.id },
