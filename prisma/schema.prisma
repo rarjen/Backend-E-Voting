@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -17,6 +17,7 @@ model User {
   name      String
   address   String?
   password  String
+  role      String   @default("VOTER") @db.VarChar(255)
   isVoted   Boolean
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
