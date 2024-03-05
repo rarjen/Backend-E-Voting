@@ -65,7 +65,6 @@ const register = async (req) => {
 
   const passwordHashed = getHash(password);
   req.body.password = passwordHashed;
-  req.body.isVoted = false;
 
   const result = await user.create({
     data: req.body,

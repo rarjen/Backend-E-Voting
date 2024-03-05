@@ -18,7 +18,7 @@ model User {
   address   String?
   password  String
   role      String   @default("VOTER") @db.VarChar(255)
-  isVoted   Boolean
+  isVoted   Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
