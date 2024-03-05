@@ -1,5 +1,6 @@
 const { STATUS_CODES } = require("http");
-const { constants } = require("http2");
+// const { constants } = require("http2");
+const { StatusCodes } = require("http-status-codes");
 
 class ApiError {
   constructor(code, message, errors = {}) {
@@ -11,32 +12,26 @@ class ApiError {
   }
 
   static badRequest(message) {
-    return new ApiError(constants.HTTP_STATUS_BAD_REQUEST, message);
+    return new ApiError(StatusCodes.BAD_REQUEST, message);
   }
 
-  static unauthorized(
-    message = STATUS_CODES[constants.HTTP_STATUS_UNAUTHORIZED]
-  ) {
-    return new ApiError(constants.HTTP_STATUS_UNAUTHORIZED, message);
+  static unauthorized(message = STATUS_CODES[StatusCodes.UNAUTHORIZED]) {
+    return new ApiError(StatusCodes.UNAUTHORIZED, message);
   }
 
-  static forbidden(message = STATUS_CODES[constants.HTTP_STATUS_FORBIDDEN]) {
-    return new ApiError(constants.HTTP_STATUS_FORBIDDEN, message);
+  static forbidden(message = STATUS_CODES[StatusCodes.FORBIDDEN]) {
+    return new ApiError(StatusCodes.FORBIDDEN, message);
   }
 
-  static notFound(message = STATUS_CODES[constants.HTTP_STATUS_NOT_FOUND]) {
-    return new ApiError(constants.HTTP_STATUS_NOT_FOUND, message);
+  static notFound(message = STATUS_CODES[StatusCodes.NOT_FOUND]) {
+    return new ApiError(StatusCodes.NOT_FOUND, message);
   }
 
   static unprocessableEntity(
-    message = STATUS_CODES[constants.HTTP_STATUS_UNPROCESSABLE_ENTITY],
+    message = STATUS_CODES[StatusCodes.UNPROCESSABLE_ENTITY],
     errors = {}
   ) {
-    return new ApiError(
-      constants.HTTP_STATUS_UNPROCESSABLE_ENTITY,
-      message,
-      errors
-    );
+    return new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, message, errors);
   }
 }
 
