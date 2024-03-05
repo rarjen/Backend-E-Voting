@@ -7,7 +7,7 @@ const vicePresidental = require("./vice_presidental");
 const pair_number = require("./candidate_pair_number");
 const supporting_parties = require("./supporting_parties");
 
-router.get("/", (req, res) => {
+router.get("/test", (req, res) => {
   return responseHandler.succes(res, "Test Route");
 });
 
